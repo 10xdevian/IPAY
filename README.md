@@ -87,4 +87,8 @@ npm run dev
 - style: — formatting, missing semi colons, etc
 - test: — adding or fixing tests
 
-[Dashboard](https://www.aniq-ui.com/en/templates/business-landing-page-nextjs-template)
+[Dashboard](https://dashboard-template-1-ivory.vercel.app/en/dashboard)
+
+https://chatgpt.com/share/689ccc5f-c010-8009-a755-603cd2713258
+
+https://www.conventionalcommits.org/en/v1.0.0/
