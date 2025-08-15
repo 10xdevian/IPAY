@@ -1,25 +1,30 @@
-export function Card({
-  className,
-  title,
-  children,
-  href,
-}: {
+import { ReactNode } from "react";
+
+interface CardProps {
+  children: ReactNode;
+  onClick?: () => void;
+  variant?: "primary" | "secondary" | "danger" | string;
   className?: string;
-  title: string;
-  children: React.ReactNode;
-  href: string;
-}): JSX.Element {
+}
+
+const variantBg: Record<string, string> = {
+  primary: "bg-[#ffffff]",
+  secondary: "bg-red-700",
+};
+
+export function Card({
+  children,
+  onClick,
+  variant="primary",
+  className = "",
+}: CardProps) {
+  const variantClass = variantBg[variant] || variantBg["secondary"];
   return (
-    <a
-      className={className}
-      href={`${href}?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
+    <div
+      className={`${variantClass} p-2 border border-gray-300 rounded-md ${className}`}
+      onClick={onClick}
     >
-      <h2 className="text-sm">
-        {title} <span>-&gt;</span>
-      </h2>
-      <p>{children}</p>
-    </a>
+      {children}
+    </div>
   );
 }
