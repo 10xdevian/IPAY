@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import type { ZodObject, ZodTypeAny } from "zod";
-
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 interface Field {
   name: string;
   type: string;
@@ -29,10 +30,14 @@ export default function ClientFormWrapper({
   const router = useRouter();
   const { error, setError } = useAuthError();
 
+  const [loading, setLoading] = useState(false);
+
   // Pick the right schema based on mode
   const schema = mode === "signup" ? signupSchema : signinSchema;
 
-  const handleSubmit = async (data: Record<string, string | boolean>): Promise<boolean> => {
+  const handleSubmit = async (
+    data: Record<string, string | boolean>
+  ): Promise<boolean> => {
     const parsed = schema.safeParse(data);
 
     if (!parsed.success) {
@@ -47,10 +52,14 @@ export default function ClientFormWrapper({
 
     // Clear all errors if the whole payload is valid
     setError({});
+    setLoading(true);
 
     try {
       if (mode === "signup") {
-        await axios.post("/api/auth/signup", parsed.data);
+        const res = await axios.post("/api/auth/signup", parsed.data);
+        // 🔥 show toast
+        // toast.success("User created successfully!");
+        toast.success(res.data.message || "Signup successful");
         router.push("/auth/signin");
       } else {
         const res = await signIn("credentials", {
@@ -63,12 +72,26 @@ export default function ClientFormWrapper({
           setError({ general: res.error });
           return false;
         }
+
         router.push("/dashboard");
       }
       return true;
-    } catch {
-      setError({ general: "Something went wrong" });
+    } catch (err: any) {
+      if (err.response?.data?.fieldErrors) {
+        // 👇 map backend errors to the right input fields
+        const fieldErrors: Record<string, string> = {};
+        err.response.data.fieldErrors.forEach(
+          (fe: { field: string; message: string }) => {
+            fieldErrors[fe.field] = fe.message;
+          }
+        );
+        setError(fieldErrors);
+      } else {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      }
       return false;
+    } finally {
+      setLoading(false); // ✅ stop loading
     }
   };
 
@@ -106,6 +129,7 @@ export default function ClientFormWrapper({
         buttonVariant="primary"
         fieldErrors={error}
         onFieldChange={handleFieldChange}
+        isLoading={loading}
       />
     </div>
   );

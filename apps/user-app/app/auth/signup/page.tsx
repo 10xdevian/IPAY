@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import InteractiveButton from "../../../components/ui/InteractiveButton";
 import ClientFormWrapper from "../../../components/auth/ClientFormWrapper";
 import { Card } from "@repo/ui";
-
 export const metadata: Metadata = {
   title: "Sign Up - MyApp",
   description: "Login to access your account",
