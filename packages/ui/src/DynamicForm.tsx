@@ -18,6 +18,7 @@ interface DynamicFormProps {
   buttonVariant?: "primary" | "secondary" | string;
   fieldErrors?: Record<string, string | null>;
   onFieldChange?: (fieldName: string, value: string | boolean) => void; // NEW
+  isLoading?: boolean;
 }
 
 export const DynamicForm: FC<DynamicFormProps> = ({
@@ -28,6 +29,8 @@ export const DynamicForm: FC<DynamicFormProps> = ({
   buttonVariant,
   fieldErrors = {},
   onFieldChange,
+  isLoading,
+  
 }) => {
   const [formData, setFormData] = useState<Record<string, string | boolean>>(
     () =>
@@ -112,7 +115,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
         </div>
       ))}
 
-      <Button variant={buttonVariant} className="w-full h-full" type="submit">
+      <Button  isLoading={isLoading} variant={buttonVariant} className="w-full h-full" type="submit">
         {submitText}
       </Button>
     </form>

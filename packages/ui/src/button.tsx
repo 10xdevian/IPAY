@@ -1,11 +1,13 @@
 import { ReactNode } from "react";
-
+import { Loader2 } from "lucide-react";
 interface ButtonProps {
   children?: ReactNode;
   onClick?: () => void;
   variant?: "primary" | "secondary" | string;
   className?: string;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  isLoading?: boolean; // ✅ new prop
 }
 
 const variantButton: Record<string, string> = {
@@ -23,6 +25,8 @@ export const Button = ({
   variant = "default", // fallback if not provided
   className = "",
   type,
+  disabled,
+  isLoading,
 }: ButtonProps) => {
   const variantClass = variantButton[variant] || variantButton["default"];
 
@@ -31,7 +35,10 @@ export const Button = ({
       onClick={onClick}
       type={type}
       className={`${variantClass} ${className}`}
+      disabled={disabled || isLoading} // ✅ block clicks while loading
     >
+      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{" "}
+      {/* ✅ spinner */}
       {children}
     </button>
   );
