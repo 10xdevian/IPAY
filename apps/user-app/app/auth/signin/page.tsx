@@ -52,7 +52,7 @@ export default function SignInPage() {
         <InteractiveButton
           variant="link"
           asButton={false}
-          href="/signup"
+          href="/auth/signup"
           className="text-gray-900 pt-2 font-light"
         >
           Dont Have account

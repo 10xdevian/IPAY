@@ -28,14 +28,16 @@ export default function ClientFormWrapper({
   const router = useRouter();
   const { error, setError } = useAuthError();
 
-  const handleSubmit = async (data: Record<string, string | boolean>): Promise<boolean> => {
+  const handleSubmit = async (
+    data: Record<string, string | boolean>
+  ): Promise<boolean> => {
     const schema = mode === "signup" ? signupSchema : signinSchema;
     const parsed = schema.safeParse(data);
 
     // Create a new error object per submission
     const fieldErrors: Record<string, string> = {};
 
-     if (!parsed.success) {
+    if (!parsed.success) {
       parsed.error.issues.forEach((issue) => {
         if (issue.path[0]) fieldErrors[issue.path[0] as string] = issue.message;
       });
@@ -81,6 +83,11 @@ export default function ClientFormWrapper({
         submitText={submitText}
         buttonVariant="primary"
         fieldErrors={error}
+        onFieldChange={(fieldName) => {
+          if (error[fieldName]) {
+            setError({ ...error, [fieldName]: null }); // clear only that field's error
+          }
+        }}
       />
     </div>
   );

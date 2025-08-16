@@ -17,6 +17,7 @@ interface DynamicFormProps {
   className?: string;
   buttonVariant?: "primary" | "secondary" | string;
   fieldErrors?: Record<string, string | null>;
+  onFieldChange?: (fieldName: string) => void;
 }
 
 export const DynamicForm: FC<DynamicFormProps> = ({
@@ -26,13 +27,17 @@ export const DynamicForm: FC<DynamicFormProps> = ({
   className,
   buttonVariant,
   fieldErrors = {},
+  onFieldChange,
 }) => {
   const [formData, setFormData] = useState<Record<string, string | boolean>>(
     () =>
-      fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? false : "";
-        return acc;
-      }, {} as Record<string, string | boolean>)
+      fields.reduce(
+        (acc, field) => {
+          acc[field.name] = field.type === "checkbox" ? false : "";
+          return acc;
+        },
+        {} as Record<string, string | boolean>
+      )
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +46,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    if (onFieldChange) onFieldChange(name);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -48,10 +54,13 @@ export const DynamicForm: FC<DynamicFormProps> = ({
     const success = await onSubmit(formData);
 
     if (success) {
-      const resetData = fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? false : "";
-        return acc;
-      }, {} as Record<string, string | boolean>);
+      const resetData = fields.reduce(
+        (acc, field) => {
+          acc[field.name] = field.type === "checkbox" ? false : "";
+          return acc;
+        },
+        {} as Record<string, string | boolean>
+      );
       setFormData(resetData);
     }
   };
