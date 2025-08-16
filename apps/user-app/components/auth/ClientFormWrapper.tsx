@@ -1,10 +1,11 @@
-// ClientFormWrapper.tsx
 "use client";
 import { useAuthError } from "@repo/store";
 import { DynamicForm } from "@repo/ui";
-import { signupSchema } from "@repo/zod-schema";
+import { signinSchema, signupSchema } from "@repo/zod-schema";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import axios from "axios";
+
 interface Field {
   name: string;
   type: string;
@@ -25,48 +26,61 @@ export default function ClientFormWrapper({
   mode = "signup",
 }: ClientFormWrapperProps) {
   const router = useRouter();
-
   const { error, setError } = useAuthError();
 
-  const handleSubmit = async (data: Record<string, string | boolean>) => {
-    const parsed = signupSchema.safeParse(data);
-    if (!parsed.success) {
-      // parsed.error is ZodError
-      const messages = parsed.error.issues
-        .map((issue) => issue.message)
-        .join(", ");
-      setError(messages);
-      return;
-    }
-    setError(null);
+  const handleSubmit = async (data: Record<string, string | boolean>): Promise<boolean> => {
+    const schema = mode === "signup" ? signupSchema : signinSchema;
+    const parsed = schema.safeParse(data);
 
-    // Call API route for signup
+    // Create a new error object per submission
+    const fieldErrors: Record<string, string> = {};
+
+     if (!parsed.success) {
+      parsed.error.issues.forEach((issue) => {
+        if (issue.path[0]) fieldErrors[issue.path[0] as string] = issue.message;
+      });
+      setError(fieldErrors);
+      return false;
+    }
+
+    setError({});
 
     try {
-      const res = await axios.post(`/api/auth/${mode}`, parsed.data);
-      console.log("API response:", res.data);
-      router.push(mode === "signup" ? "signin" : "/dashboard");
-    } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setError(error.response.data.message);
+      if (mode === "signup") {
+        await axios.post("/api/auth/signup", parsed.data);
+        router.push("/auth/signin");
       } else {
-        setError("Something went wrong");
+        const res = await signIn("credentials", {
+          redirect: false,
+          email: parsed.data.email,
+          password: parsed.data.password,
+        });
+
+        if (res?.error) {
+          setError({ general: res.error });
+          return false;
+        } else {
+          router.push("/dashboard");
+        }
       }
+      return true;
+    } catch (err: any) {
+      setError({ general: "Something went wrong" });
+      return false;
     }
   };
 
   return (
     <div className="w-full">
-      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+      {error?.general && (
+        <p className="text-red-500 text-sm mb-2">{error.general}</p>
+      )}
       <DynamicForm
         fields={fields}
         onSubmit={handleSubmit}
         submitText={submitText}
         buttonVariant="primary"
+        fieldErrors={error}
       />
     </div>
   );

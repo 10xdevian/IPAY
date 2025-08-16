@@ -1,72 +1,49 @@
-import db from "@repo/db/client";
+import NextAuth, { NextAuthOptions, User, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import prisma from "@repo/db/client";
+import { compare } from "bcryptjs";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        phone: {
-          label: "Phone number",
-          type: "text",
-          placeholder: "1231231231",
-          required: true,
-        },
-        password: { label: "Password", type: "password", required: true },
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
-      // TODO: User credentials type from next-aut
-      async authorize(credentials: any) {
-        // Do zod validation, OTP validation here
-        const hashedPassword = await bcrypt.hash(credentials.password, 10);
-        const existingUser = await db.user.findFirst({
-          where: {
-            number: credentials.phone,
-          },
+      async authorize(credentials): Promise<User | null> {
+        if (!credentials?.email || !credentials?.password) return null;
+
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
         });
 
-        if (existingUser) {
-          const passwordValidation = await bcrypt.compare(
-            credentials.password,
-            existingUser.password
-          );
-          if (passwordValidation) {
-            return {
-              id: existingUser.id.toString(),
-              name: existingUser.name,
-              email: existingUser.number,
-            };
-          }
-          return null;
-        }
+        if (!user) return null;
 
-        try {
-          const user = await db.user.create({
-            data: {
-              number: credentials.phone,
-              password: hashedPassword,
-            },
-          });
+        const isPasswordValid = await compare(credentials.password, user.password);
+        if (!isPasswordValid) return null;
 
-          return {
-            id: user.id.toString(),
-            name: user.name,
-            email: user.number,
-          };
-        } catch (e) {
-          console.error(e);
-        }
-
-        return null;
+        return {
+          id: user.id.toString(),
+          email: user.email ?? undefined,
+          name: user.name ?? undefined,
+        };
       },
     }),
   ],
-  secret: process.env.JWT_SECRET || "secret",
+  pages: {
+    signIn: "/auth/signin",
+  },
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
-    // TODO: can u fix the type here? Using any is bad
-    async session({ token, session }: any) {
-      session.user.id = token.sub;
-
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      if (token && session.user) session.user.id = token.id!;
       return session;
     },
   },

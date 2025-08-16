@@ -27,6 +27,8 @@ export default function SignInPage() {
     },
   ];
 
+
+
   return (
     <Card className="w-[20rem] p-5">
       <div className="flex flex-col justify-center items-center ">
@@ -45,7 +47,7 @@ export default function SignInPage() {
           </p>
         </div>
 
-        <ClientFormWrapper submitText="SignIn" fields={fields} />
+        <ClientFormWrapper submitText="SignIn" fields={fields} mode="signin"/>
 
         <InteractiveButton
           variant="link"

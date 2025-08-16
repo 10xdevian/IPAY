@@ -12,10 +12,11 @@ interface Field {
 
 interface DynamicFormProps {
   fields: Field[];
-  onSubmit: (data: Record<string, string | boolean>) => void;
+  onSubmit: (data: Record<string, string | boolean>) => Promise<boolean>;
   submitText?: string;
   className?: string;
   buttonVariant?: "primary" | "secondary" | string;
+  fieldErrors?: Record<string, string | null>;
 }
 
 export const DynamicForm: FC<DynamicFormProps> = ({
@@ -24,20 +25,16 @@ export const DynamicForm: FC<DynamicFormProps> = ({
   submitText = "Submit",
   className,
   buttonVariant,
+  fieldErrors = {},
 }) => {
-  // Initialize state
   const [formData, setFormData] = useState<Record<string, string | boolean>>(
     () =>
-      fields.reduce(
-        (acc, field) => {
-          acc[field.name] = field.type === "checkbox" ? false : "";
-          return acc;
-        },
-        {} as Record<string, string | boolean>
-      )
+      fields.reduce((acc, field) => {
+        acc[field.name] = field.type === "checkbox" ? false : "";
+        return acc;
+      }, {} as Record<string, string | boolean>)
   );
 
-  // Handle input change
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, type, value, checked } = e.target;
     setFormData((prev) => ({
@@ -46,21 +43,17 @@ export const DynamicForm: FC<DynamicFormProps> = ({
     }));
   };
 
-  // Handle form submit
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    const success = await onSubmit(formData);
 
-    // Reset form state
-    const resetData = fields.reduce(
-      (acc, field) => {
+    if (success) {
+      const resetData = fields.reduce((acc, field) => {
         acc[field.name] = field.type === "checkbox" ? false : "";
         return acc;
-      },
-      {} as Record<string, string | boolean>
-    );
-
-    setFormData(resetData);
+      }, {} as Record<string, string | boolean>);
+      setFormData(resetData);
+    }
   };
 
   return (
@@ -68,11 +61,11 @@ export const DynamicForm: FC<DynamicFormProps> = ({
       {fields.map((field) => (
         <div key={field.name} className="mb-4">
           {field.type === "checkbox" ? (
-            <label htmlFor="" className="flex items-center gap-2">
+            <label className="flex items-center gap-2">
               <input
                 id={field.name}
                 name={field.name}
-                type={field.type}
+                type="checkbox"
                 checked={formData[field.name] as boolean}
                 onChange={handleChange}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
@@ -103,10 +96,16 @@ export const DynamicForm: FC<DynamicFormProps> = ({
               />
             </>
           )}
+
+          {fieldErrors[field.name] && (
+            <p className="text-red-500 text-xs mt-1">
+              {fieldErrors[field.name]}
+            </p>
+          )}
         </div>
       ))}
 
-      <Button variant={buttonVariant} className="w-full h-full " type="submit">
+      <Button variant={buttonVariant} className="w-full h-full" type="submit">
         {submitText}
       </Button>
     </form>

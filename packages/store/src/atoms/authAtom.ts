@@ -1,6 +1,8 @@
 import { atom } from "recoil";
 
-export const authErrorAtom = atom<string | null>({
-  key: "authError",
-  default: null,
+export type AuthErrorType = Record<string, string | null>; // { email: "Invalid", password: null }
+
+export const authErrorAtom = atom<AuthErrorType>({
+  key: "authErrorAtom",
+  default: {},
 });
