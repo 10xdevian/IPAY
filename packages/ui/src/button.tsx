@@ -34,12 +34,14 @@ export const Button = ({
     <button
       onClick={onClick}
       type={type}
-      className={`${variantClass} ${className}`}
+      className={`${variantClass} ${className} flex items-center justify-center ${
+        isLoading ? "opacity-70 cursor-not-allowed" : ""
+      }`}
       disabled={disabled || isLoading} // ✅ block clicks while loading
     >
-      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{" "}
       {/* ✅ spinner */}
       {children}
+      {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
     </button>
   );
 };

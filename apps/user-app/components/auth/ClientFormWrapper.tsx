@@ -55,6 +55,7 @@ export default function ClientFormWrapper({
     setLoading(true);
 
     try {
+      setLoading(true);
       if (mode === "signup") {
         const res = await axios.post("/api/auth/signup", parsed.data);
         // 🔥 show toast
