@@ -17,7 +17,7 @@ interface DynamicFormProps {
   className?: string;
   buttonVariant?: "primary" | "secondary" | string;
   fieldErrors?: Record<string, string | null>;
-  onFieldChange?: (fieldName: string) => void;
+  onFieldChange?: (fieldName: string, value: string | boolean) => void; // NEW
 }
 
 export const DynamicForm: FC<DynamicFormProps> = ({
@@ -31,22 +31,23 @@ export const DynamicForm: FC<DynamicFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<Record<string, string | boolean>>(
     () =>
-      fields.reduce(
-        (acc, field) => {
-          acc[field.name] = field.type === "checkbox" ? false : "";
-          return acc;
-        },
-        {} as Record<string, string | boolean>
-      )
+      fields.reduce((acc, field) => {
+        acc[field.name] = field.type === "checkbox" ? false : "";
+        return acc;
+      }, {} as Record<string, string | boolean>)
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, type, value, checked } = e.target;
+    const next = type === "checkbox" ? checked : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: next,
     }));
-    if (onFieldChange) onFieldChange(name);
+
+    // Ask parent to validate this one field; only clears if valid
+    if (onFieldChange) onFieldChange(name, next);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -54,19 +55,16 @@ export const DynamicForm: FC<DynamicFormProps> = ({
     const success = await onSubmit(formData);
 
     if (success) {
-      const resetData = fields.reduce(
-        (acc, field) => {
-          acc[field.name] = field.type === "checkbox" ? false : "";
-          return acc;
-        },
-        {} as Record<string, string | boolean>
-      );
+      const resetData = fields.reduce((acc, field) => {
+        acc[field.name] = field.type === "checkbox" ? false : "";
+        return acc;
+      }, {} as Record<string, string | boolean>);
       setFormData(resetData);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`w-full ${className}`}>
+    <form onSubmit={handleSubmit} className={`w-full ${className ?? ""}`}>
       {fields.map((field) => (
         <div key={field.name} className="mb-4">
           {field.type === "checkbox" ? (

@@ -5,6 +5,7 @@ import { signinSchema, signupSchema } from "@repo/zod-schema";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import axios from "axios";
+import type { ZodObject, ZodTypeAny } from "zod";
 
 interface Field {
   name: string;
@@ -28,23 +29,23 @@ export default function ClientFormWrapper({
   const router = useRouter();
   const { error, setError } = useAuthError();
 
-  const handleSubmit = async (
-    data: Record<string, string | boolean>
-  ): Promise<boolean> => {
-    const schema = mode === "signup" ? signupSchema : signinSchema;
+  // Pick the right schema based on mode
+  const schema = mode === "signup" ? signupSchema : signinSchema;
+
+  const handleSubmit = async (data: Record<string, string | boolean>): Promise<boolean> => {
     const parsed = schema.safeParse(data);
 
-    // Create a new error object per submission
-    const fieldErrors: Record<string, string> = {};
-
     if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
       parsed.error.issues.forEach((issue) => {
-        if (issue.path[0]) fieldErrors[issue.path[0] as string] = issue.message;
+        const path = issue.path[0] as string | undefined;
+        if (path) fieldErrors[path] = issue.message;
       });
       setError(fieldErrors);
       return false;
     }
 
+    // Clear all errors if the whole payload is valid
     setError({});
 
     try {
@@ -61,14 +62,35 @@ export default function ClientFormWrapper({
         if (res?.error) {
           setError({ general: res.error });
           return false;
-        } else {
-          router.push("/dashboard");
         }
+        router.push("/dashboard");
       }
       return true;
-    } catch (err: any) {
+    } catch {
       setError({ general: "Something went wrong" });
       return false;
+    }
+  };
+
+  // Validate a single field on change; only clear its error when valid
+  const handleFieldChange = (fieldName: string, value: string | boolean) => {
+    // Only bother if that field currently has an error (keeps UX calm)
+    if (!error?.[fieldName]) return;
+
+    // Validate just this field against the schema's shape
+    const obj = schema as unknown as ZodObject<Record<string, ZodTypeAny>>;
+    const shape = (obj as any).shape as Record<string, ZodTypeAny> | undefined;
+    const fieldSchema = shape?.[fieldName];
+    if (!fieldSchema) return;
+
+    const result = fieldSchema.safeParse(value);
+    if (result.success) {
+      // Clear only this field's error now that it’s valid
+      setError({ ...error, [fieldName]: null });
+    } else {
+      // Keep (or update) the error message to reflect current input
+      const msg = result.error.issues[0]?.message ?? "Invalid value";
+      setError({ ...error, [fieldName]: msg });
     }
   };
 
@@ -83,11 +105,7 @@ export default function ClientFormWrapper({
         submitText={submitText}
         buttonVariant="primary"
         fieldErrors={error}
-        onFieldChange={(fieldName) => {
-          if (error[fieldName]) {
-            setError({ ...error, [fieldName]: null }); // clear only that field's error
-          }
-        }}
+        onFieldChange={handleFieldChange}
       />
     </div>
   );

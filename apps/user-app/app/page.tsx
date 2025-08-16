@@ -44,7 +44,7 @@ export default function Page(): JSX.Element {
         </div>
         <InteractiveButton
           asButton={false}
-          href="/signin"
+          href="/auth/signin"
           variant="primary"
           className="bg-orange-600 hover:bg-orange-500 w-[15rem] h-[2rem]"
         >

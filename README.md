@@ -31,6 +31,7 @@ cp .env.example.txt .env
 
 npx prisma migrate dev --schema=packages/db/prisma/schema.prisma
 npx prisma generate --schema=packages/db/prisma/schema.prisma
+npx prisma studio --schema=packages/db/prisma/schema.prisma
 
 # 7️⃣ Start the development server
 npm run dev
