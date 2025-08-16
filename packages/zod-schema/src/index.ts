@@ -3,7 +3,7 @@ import {
   SignupInput,
   signupSchema,
   signinSchema,
-} from "./schema/user.schema";
+} from "./schema/authSchema";
 
 // Re-export
 export { signupSchema, signinSchema };

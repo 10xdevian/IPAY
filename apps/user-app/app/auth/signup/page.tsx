@@ -4,31 +4,26 @@ import ClientFormWrapper from "../../../components/auth/ClientFormWrapper";
 import { Card } from "@repo/ui";
 
 export const metadata: Metadata = {
-  title: "Sign In - MyApp",
+  title: "Sign Up - MyApp",
   description: "Login to access your account",
 };
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const fields = [
+    { name: "username", type: "text", label: "Username", required: true },
+    { name: "email", type: "email", label: "Email", required: true },
+    { name: "password", type: "password", label: "Password", required: true },
+    { name: "number", type: "text", label: "Phone Number", required: true },
     {
-      name: "email",
-      type: "email",
-      label: "Email",
+      name: "acceptTerms",
+      type: "checkbox",
+      label: "Accept Terms",
       required: true,
-      placeholder: "vik6025@gmail.com",
-    },
-
-    {
-      name: "password",
-      type: "password",
-      label: "Password",
-      required: true,
-      placeholder: "*******",
     },
   ];
 
   return (
-    <Card className="w-[20rem] p-5">
+    <Card className="w-[25rem] p-5">
       <div className="flex flex-col justify-center items-center ">
         <div className="flex flex-col justify-center items-center w-[15rem] h-[8rem] text-center gap-1">
           <InteractiveButton
@@ -45,15 +40,15 @@ export default function SignInPage() {
           </p>
         </div>
 
-        <ClientFormWrapper submitText="SignIn" fields={fields} />
+        <ClientFormWrapper mode="signup" submitText="Signup" fields={fields} />
 
         <InteractiveButton
           variant="link"
           asButton={false}
-          href="/signup"
+          href="/signin"
           className="text-gray-900 pt-2 font-light"
         >
-          Dont Have account
+          Signin
         </InteractiveButton>
       </div>
     </Card>

@@ -4,32 +4,18 @@ import ClientFormWrapper from "../../../components/auth/ClientFormWrapper";
 import { Card } from "@repo/ui";
 
 export const metadata: Metadata = {
-  title: "Sign Up - MyApp",
+  title: "Sign In - Ipay",
   description: "Login to access your account",
 };
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const fields = [
-    {
-      name: "Username",
-      type: "text",
-      label: "Username",
-      required: true,
-      placeholder: "vibhu12",
-    },
     {
       name: "email",
       type: "email",
       label: "Email",
       required: true,
       placeholder: "vik6025@gmail.com",
-    },
-    {
-      name: "phone",
-      type: "phone",
-      label: "Phone",
-      required: true,
-      placeholder: "953142****",
     },
 
     {
@@ -42,7 +28,7 @@ export default function SignUpPage() {
   ];
 
   return (
-    <Card className="w-[25rem] p-5">
+    <Card className="w-[20rem] p-5">
       <div className="flex flex-col justify-center items-center ">
         <div className="flex flex-col justify-center items-center w-[15rem] h-[8rem] text-center gap-1">
           <InteractiveButton
@@ -59,15 +45,15 @@ export default function SignUpPage() {
           </p>
         </div>
 
-        <ClientFormWrapper submitText="Signup" fields={fields} />
+        <ClientFormWrapper submitText="SignIn" fields={fields} />
 
         <InteractiveButton
           variant="link"
           asButton={false}
-          href="/signin"
+          href="/signup"
           className="text-gray-900 pt-2 font-light"
         >
-          Signin
+          Dont Have account
         </InteractiveButton>
       </div>
     </Card>
