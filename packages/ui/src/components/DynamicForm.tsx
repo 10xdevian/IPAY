@@ -76,16 +76,16 @@ export const DynamicForm: FC<DynamicFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className={`w-full ${className ?? ""}`}>
       {fields.map((field) => (
-        <div key={field.name} className="mb-4">
+        <div key={field.name} className="mb-2">
           {field.type === "checkbox" ? (
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-1">
               <input
                 id={field.name}
                 name={field.name}
                 type="checkbox"
                 checked={formData[field.name] as boolean}
                 onChange={handleChange}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500   "
               />
               {field.label && (
                 <span className="text-gray-900 text-sm">{field.label}</span>
@@ -96,7 +96,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
               {field.label && (
                 <label
                   htmlFor={field.name}
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-0.5 text-sm font-medium text-gray-900"
                 >
                   {field.label}
                 </label>
@@ -125,7 +125,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
       <Button
         isLoading={isLoading}
         variant={buttonVariant}
-        className="w-full h-full"
+        className="w-full h-full mt-4"
         type="submit"
       >
         {submitText}
