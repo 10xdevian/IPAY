@@ -61,7 +61,7 @@ export default function ClientFormWrapper({
         // 🔥 show toast
         // toast.success("User created successfully!");
         toast.success(res.data.message || "Signup successful");
-        router.push("/auth/signin");
+        router.push("/signin");
       } else {
         const res = await signIn("credentials", {
           redirect: false,

@@ -9,7 +9,7 @@ function NavbarWrapper() {
         leftItems={
           <>
             <InteractiveButton
-              href="/ipay"
+              href="/"
               variant="logo"
               asButton={false}
               className="text-black"
@@ -19,11 +19,7 @@ function NavbarWrapper() {
                 <h1 className="text-4xl">Ipay</h1>
               </div>
             </InteractiveButton>
-            <InteractiveButton
-              
-              href="/personal"
-              variant="primary"
-            >
+            <InteractiveButton href="/" variant="primary">
               Personal
             </InteractiveButton>
             <InteractiveButton href="/business " variant="secondary">
@@ -33,12 +29,16 @@ function NavbarWrapper() {
         }
         rightItems={
           <>
-            <InteractiveButton variant="outline" href="/pricing">
+            <InteractiveButton variant="secondary" href="/pricing">
               Pricing
             </InteractiveButton>
-            <InteractiveButton href="/help">Help</InteractiveButton>
-            <InteractiveButton href="/login">Login</InteractiveButton>
-            <InteractiveButton href="/register" variant="secondary">
+            <InteractiveButton variant="secondary" href="/help">
+              Help
+            </InteractiveButton>
+            <InteractiveButton variant="secondary" href="/signin">
+              Login
+            </InteractiveButton>
+            <InteractiveButton href="/signup" variant="primary">
               Register
             </InteractiveButton>
           </>

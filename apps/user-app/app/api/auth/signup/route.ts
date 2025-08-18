@@ -20,36 +20,45 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, password, username, number } = parsed.data;
+    const { email, password, username, name, number } = parsed.data;
 
     // ✅ Check email
     const emailExists = await prisma.user.findUnique({ where: { email } });
     if (emailExists) {
       return new Response(
-        JSON.stringify({ field: "email", message: "Email is already in use. Please login." }),
+        JSON.stringify({
+          field: "email",
+          message: "Email is already in use. Please login.",
+        }),
         { status: 400 }
       );
     }
 
     // ✅ Check username
-    const usernameExists = await prisma.user.findUnique({ where: { name: username } });
+    const usernameExists = await prisma.user.findUnique({
+      where: { username },
+    });
     if (usernameExists) {
       return new Response(
-        JSON.stringify({ field: "username", message: "Username is already taken." }),
+        JSON.stringify({
+          field: "username",
+          message: "Username is already taken.",
+        }),
         { status: 400 }
       );
     }
-
 
     // ✅ Check phone number
     const numberExists = await prisma.user.findUnique({ where: { number } });
     if (numberExists) {
       return new Response(
-        JSON.stringify({ field: "number", message: "Phone number is already registered. Please login." }),
+        JSON.stringify({
+          field: "number",
+          message: "Phone number is already registered. Please login.",
+        }),
         { status: 400 }
       );
     }
-
 
     // // Check if user exists
     // const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -64,7 +73,7 @@ export async function POST(req: Request) {
 
     // Create user
     await prisma.user.create({
-      data: { email, name: username, password: hashedPassword, number },
+      data: { email, name, username, password: hashedPassword, number },
     });
 
     return new Response(
@@ -73,8 +82,11 @@ export async function POST(req: Request) {
     );
   } catch (err) {
     console.error("Signup Error:", err);
-    return new Response(JSON.stringify({ message: "Signup failed, please try again later" }), {
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({ message: "Signup failed, please try again later" }),
+      {
+        status: 500,
+      }
+    );
   }
 }
