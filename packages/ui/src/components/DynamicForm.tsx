@@ -10,12 +10,14 @@ interface Field {
   required?: boolean;
 }
 
+type ButtonVariant = "primary" | "secondary" | "outline" | "link" | "logo";
+
 interface DynamicFormProps {
   fields: Field[];
   onSubmit: (data: Record<string, string | boolean>) => Promise<boolean>;
   submitText?: string;
   className?: string;
-  buttonVariant?: "primary" | "secondary" | string;
+  buttonVariant?: ButtonVariant;
   fieldErrors?: Record<string, string | null>;
   onFieldChange?: (fieldName: string, value: string | boolean) => void; // NEW
   isLoading?: boolean;
@@ -30,14 +32,16 @@ export const DynamicForm: FC<DynamicFormProps> = ({
   fieldErrors = {},
   onFieldChange,
   isLoading,
-  
 }) => {
   const [formData, setFormData] = useState<Record<string, string | boolean>>(
     () =>
-      fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? false : "";
-        return acc;
-      }, {} as Record<string, string | boolean>)
+      fields.reduce(
+        (acc, field) => {
+          acc[field.name] = field.type === "checkbox" ? false : "";
+          return acc;
+        },
+        {} as Record<string, string | boolean>
+      )
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -58,10 +62,13 @@ export const DynamicForm: FC<DynamicFormProps> = ({
     const success = await onSubmit(formData);
 
     if (success) {
-      const resetData = fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? false : "";
-        return acc;
-      }, {} as Record<string, string | boolean>);
+      const resetData = fields.reduce(
+        (acc, field) => {
+          acc[field.name] = field.type === "checkbox" ? false : "";
+          return acc;
+        },
+        {} as Record<string, string | boolean>
+      );
       setFormData(resetData);
     }
   };
@@ -115,7 +122,12 @@ export const DynamicForm: FC<DynamicFormProps> = ({
         </div>
       ))}
 
-      <Button  isLoading={isLoading} variant={buttonVariant} className="w-full h-full" type="submit">
+      <Button
+        isLoading={isLoading}
+        variant={buttonVariant}
+        className="w-full h-full"
+        type="submit"
+      >
         {submitText}
       </Button>
     </form>

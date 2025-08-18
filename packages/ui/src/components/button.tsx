@@ -1,9 +1,12 @@
 import { ReactNode } from "react";
 import { Loader2 } from "lucide-react";
+
+type ButtonVariant = "primary" | "secondary" | "outline" | "link" | "logo";
+
 interface ButtonProps {
   children?: ReactNode;
   onClick?: () => void;
-  variant?: "primary" | "secondary" | string;
+  variant?: ButtonVariant;
   className?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
@@ -11,18 +14,20 @@ interface ButtonProps {
 }
 
 const variantButton: Record<string, string> = {
-  default:
-    "px-5 py-2.5 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200",
   primary:
-    "text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5",
+    "text-sm bg-lime-300 hover:bg-lime-400 hover:transition delay-150 duration-300 ease-in-out font-semibold rounded-full px-4 py-1.5 w-full ",
   secondary:
-    "text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5",
+    "text-sm  hover:bg-gray-100 transition delay-150 duration-300 ease-in-out font-semibold rounded-full px-4 py-1.5 w-full ",
+  outline:
+    "border border-green-900 hover:border-none text-black-900 hover:bg-lime-400 hover:transition delay-150 duration-300 ease-in-out rounded-full  focus:ring-2 focus:ring-green-200  text-sm px-4 py-1.5 w-full ",
+  link: "text-blue-600 hover:underline hover:text-blue-800 text-sm font-medium px-4 py-1.5",
+  logo: "text-black text-4xl uppercase",
 };
 
 export const Button = ({
   onClick,
   children,
-  variant = "default", // fallback if not provided
+  variant = "primary", // fallback if not provided
   className = "",
   type,
   disabled,
