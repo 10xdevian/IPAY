@@ -28,9 +28,9 @@ export default function SignInPage() {
   ];
 
   return (
-    <Card className="w-[25rem] p-5">
+    <Card className="w-auto p-10">
       <div className="flex flex-col justify-center items-center ">
-        <div className="flex flex-col justify-center items-center w-[22rem] text-center gap-2 mb-3">
+        <div className="flex flex-col justify-center items-center w-[30rem] text-center gap-2 mb-3">
           <h1 className="text-xl font-bold">Welcome Back.</h1>
 
           <div className="flex justify-center items-center gap-0.5">
