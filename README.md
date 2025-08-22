@@ -42,12 +42,18 @@ npm run dev
 
 # 📌 Features
 
-- Paytm-inspired architecture
-- Monorepo setup with Turborepo
-- Prisma ORM for database management
-- Supports Dockerized Postgres setup
-- Modular apps (user-app, merchant-app, etc.)
-- Modular packages (db, store(recoil), ui, zod.)
+- ###### Authentication
+
+  - User can Login and Sign up
+  - Password strength check → Require min length + special chars.
+  - Input validation using zod
+  - user cant send username just number or letter they need to send combination of both
+  - user get input filed error if they put not correct data by following validation
+
+- ###### SEO Optimized
+  - I am using use Client only as wrapper not to full app
+ 
+
 
 ---
 

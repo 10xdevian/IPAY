@@ -20,7 +20,7 @@ const variantButton: Record<string, string> = {
     "text-sm  hover:bg-gray-100 transition delay-150 duration-300 ease-in-out font-semibold rounded-full px-4 py-1.5 w-full ",
   outline:
     "border border-green-900 hover:border-none text-black-900 hover:bg-lime-400 hover:transition delay-150 duration-300 ease-in-out rounded-full  focus:ring-2 focus:ring-green-200  text-sm px-4 py-1.5 w-full ",
-  link: "text-blue-600 hover:underline hover:text-blue-800 text-sm font-medium p-1",
+  link: "text-blue-600 hover:underline hover:text-blue-800 text-sm font-medium p-1 underline",
   logo: "text-black text-4xl uppercase",
 };
 
