@@ -26,7 +26,7 @@ export default function SignUpPage() {
   return (
     <Card className="p-[2rem]">
       <div className="flex flex-col justify-center items-center ">
-        <div className="flex flex-col justify-center items-center w-full w-[25rem] h-[8rem] text-center gap-0.5 ">
+        <div className="flex flex-col justify-center items-center  w-[25rem] h-[8rem] text-center gap-0.5 ">
           <div className="flex justify-center gap-1 items-center  ">
             <p className="text-black text-xl font-semibold capitalize">
               Create your

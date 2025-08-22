@@ -73,7 +73,7 @@ export default function ClientFormWrapper({
           setError({ general: res.error });
           return false;
         }
-
+        toast.success(res?.error || "signin successful");
         router.push("/dashboard");
       }
       return true;

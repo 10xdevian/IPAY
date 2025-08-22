@@ -1,7 +1,4 @@
-"use client";
-import { Button, Card } from "@repo/ui";
 import InteractiveButton from "../components/ui/InteractiveButton";
-import PageTransition from "../components/transitions/PageTransition";
 import NavbarWrapper from "../components/ui/NavbarWrapper";
 
 export default function Page(): JSX.Element {
@@ -18,7 +15,7 @@ export default function Page(): JSX.Element {
             </InteractiveButton>
           </div>
 
-          <div className="bg-red-100 w-full max-w-[200px] ">Image</div>
+          <div className="bg-red-100 w-full max-w-[200px]">Image</div>
         </div>
       </div>
     </>

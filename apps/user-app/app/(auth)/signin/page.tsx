@@ -4,7 +4,7 @@ import ClientFormWrapper from "../../../components/auth/ClientFormWrapper";
 import { Card } from "@repo/ui";
 
 export const metadata: Metadata = {
-  title: "Sign In - Ipay",
+  title: "Sign In - IPAY",
   description: "Login to access your account",
 };
 
@@ -48,7 +48,7 @@ export default function SignInPage() {
               href="/signup"
               className="text-gray-900  font-light"
             >
-              Signup
+              Sign up
             </InteractiveButton>
           </div>
         </div>

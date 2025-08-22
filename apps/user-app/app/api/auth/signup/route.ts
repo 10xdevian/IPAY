@@ -20,7 +20,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, password, username, name, number } = parsed.data;
+    let { email, password, username, name, number } = parsed.data;
+
+    email = email.toLowerCase().trim();
+    username = username.toLowerCase().trim();
 
     // ✅ Check email
     const emailExists = await prisma.user.findUnique({ where: { email } });
@@ -60,13 +63,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // // Check if user exists
-    // const existingUser = await prisma.user.findUnique({ where: { email } });
-    // if (existingUser) {
-    //   return new Response(JSON.stringify({ message: "User already exists" }), {
-    //     status: 400,
-    //   });
-    // }
+   
 
     // Hash password
     const hashedPassword = await hash(password, 10);
