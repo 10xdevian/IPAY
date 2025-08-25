@@ -1,7 +1,7 @@
-# 💰 IPAY — Paytm-like Wallet App
+# 🏦 Wallet System (User & Merchant)
 
-A monorepo-based Paytm-like wallet application built with **Next.js**, **Prisma**, **Turborepo**, and **Docker**.  
-Supports both **User** and **Merchant** applications, along with a shared database and packages.
+Paytm-like wallet application built with **Next.js**, **Prisma**, **Turborepo**, and **Docker**.
+Supports both **User** and **Merchant** applications, along with a shared database and packages. where both **User** and **Merchant** have wallets to **send**, **receive**, **request**, and **refund** money. All transactions are **wallet-to-wallet**, with funds **loaded/unloaded** via a dummy bank integration.
 
 ---
 
@@ -40,62 +40,145 @@ npm run dev
 
 ---
 
-# 📌 Features
 
-- ###### Authentication
+# 🚀 Features Overview
+- ###### 👤 User
 
-  - User can Login and Sign up
-  - Password strength check → Require min length + special chars.
-  - Input validation using zod
-  - user cant send username just number or letter they need to send combination of both
-  - user get input filed error if they put not correct data by following validation
+  - Can register and complete KYC (Know Your Customer).
 
-- ###### SEO Optimized
-  - I am using use Client only as wrapper not to full app
- 
+  - Creates a 4-digit transaction PIN during KYC.
+
+  - Required for payments above ₹500.
+
+  - For payments ≤ ₹500, PIN is optional.
+
+  - Can add money to their wallet via dummy bank.
+  - **Can** **send** **money**:
+    - To merchants (for purchases).
+
+    -  To other users (via username, wallet ID, or public link).
 
 
----
+  - Can request payments from other users via a public payment link.
 
-## 🎥 Project Demo
+  - Can receive money from merchants as refunds.
 
-![Quick Preview](assets/demo.gif)
+  - Can view complete transaction history.
 
-🎥 **Full Demo Video:** [Watch on YouTube](https://youtu.be/your_video_id)
+- ###### 🛒 Merchant
 
----
+  - Merchants also have a wallet linked to their account.
 
-## 🛠 Tech Stack
+  - Can accept payments from users.
 
-**Frontend:**  
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38B2AC?logo=tailwindcss&logoColor=white)
+  - Can refund money back to the user’s wallet.
 
-**Backend:**  
-![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)  
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white)
+  - Can generate payment requests via public links.
 
-**DevOps & Tools:**  
-![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)  
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)
+- ###### 💳 Wallet
 
----
+  - Every user/merchant has only one wallet.
 
-**Repo setup:** [Paytm 1](https://projects.100xdevs.com/tracks/Paytm/paytm17-1)
+  - Wallet balance is updated in real time after every transaction.
 
-**Adding WebHooks:** [Paytm 2](https://projects.100xdevs.com/tracks/PayTM2/paytm2-1)
+  - **Supports:**
 
-# 💡 Types (Conventional Commits)
+    - Credits (Add money, receive from user/merchant).
 
-- feat: — new feature
-- fix: — bug fix
-- chore: — tooling/infra updates
-- refactor: — code change that doesn’t fix a bug or add feature
-- docs: — documentation changes
-- style: — formatting, missing semi colons, etc
-- test: — adding or fixing tests
+    - Debits (Send money, refund, withdrawal).
 
-[Dashboard](https://dashboard-template-1-ivory.vercel.app/en/dashboard)
+- ###### 🔐 KYC + Security
 
-https://chatgpt.com/share/689ccc5f-c010-8009-a755-603cd2713258
+  - Each user must complete KYC verification (basic details + 4-digit PIN).
 
-https://www.conventionalcommits.org/en/v1.0.0/
+  - PIN adds transaction-level security like UPI.
+
+  - Transactions above ₹500 require PIN; small transfers do not.
+
+- ###### 💸 Transactions
+
+  - All payments are wallet-to-wallet transfers.
+
+  - Transactions are recorded in the WalletTransaction model with:
+
+  - **amount**
+
+    - type (credit/debit)
+
+    - status (pending, success, failed, refunded, disputed)
+
+    - sender + receiver
+
+    - transactionId
+
+    - timestamps
+
+- ###### 🔗 Public Payment Links
+
+  - Users/Merchants can create payment links with:
+
+  - **amount**
+
+    - reason (description for payment)
+
+  - These links can be shared with multiple users for easy payment collection.
+
+  - **Example:**
+
+    - Merchant creates a link for ₹999 "Concert Ticket".
+
+    - Users open the link and pay directly via their wallet.
+
+- ###### 🛡️ Refunds & Disputes
+
+  - Merchants can initiate refunds for users.
+
+  - Users can raise disputes if a transaction is incorrect.
+```
+Refunds and disputes are tracked under the WalletTransaction model.
+```
+
+
+# 📡 REST API Endpoints
+#### 🔑 Auth
+```
+POST /auth/register      → Register new user/merchant
+POST /auth/login         → Login
+```
+
+#### 👤 User / Merchant
+```
+GET  /users/:id          → Get user details
+POST /users/:id/kyc      → Submit KYC + 4-digit PIN
+GET  /merchants/:id      → Get merchant details
+```
+
+#### 💳 Wallet
+```
+GET  /wallet/:id         → Get wallet balance
+POST /wallet/add-money   → Add funds (via dummy bank)
+POST /wallet/withdraw    → Withdraw funds (to dummy bank)
+```
+#### 🔄 Transactions
+ ```
+POST /transactions/send   → Send money (user→user or user→merchant)
+GET  /transactions/:id    → Get transaction details
+POST /transactions/refund → Refund a transaction (merchant→user)
+```
+
+#### 🔗 Payment Links
+```
+POST /payment-links       → Create a payment link
+GET  /payment-links/:id   → Get link details
+POST /payment-links/pay   → Pay using a payment link
+```
+
+####    🚨 Disputes
+```
+POST /disputes            → Raise a dispute
+GET  /disputes/:id        → Check dispute status
+PUT  /disputes/:id/resolve → Resolve or reject dispute
+```
+
+# ER Diagram
+![ER Diagram](./assets/wallet-erd.png)
