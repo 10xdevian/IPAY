@@ -1,13 +1,19 @@
 "use client";
-import { useAuthError } from "@repo/store";
+import {
+  useAuthError,
+  useLoading,
+  useOtpLogin,
+  useOtpModal,
+} from "@repo/store";
 import { DynamicForm } from "@repo/ui";
 import { signinSchema, signupSchema } from "@repo/zod-schema";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import type { ZodObject, ZodTypeAny } from "zod";
-import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
+import OtpModal from "./OtpModal";
 interface Field {
   name: string;
   type: string;
@@ -28,9 +34,16 @@ export default function ClientFormWrapper({
   mode = "signup",
 }: ClientFormWrapperProps) {
   const router = useRouter();
-  const { error, setError } = useAuthError();
 
-  const [loading, setLoading] = useState(false);
+  //  Recoil state
+  const { error, setError } = useAuthError();
+  const { loading, startLoading, stopLoading } = useLoading();
+  const { setIsOtpLogin, isOtpLogin } = useOtpLogin();
+  const { openModal } = useOtpModal();
+  const [otpValue, setOtpValue] = useState("");
+  const [formValues, setFormValues] = useState<
+    Record<string, string | boolean>
+  >({});
 
   // Pick the right schema based on mode
   const schema = mode === "signup" ? signupSchema : signinSchema;
@@ -38,6 +51,24 @@ export default function ClientFormWrapper({
   const handleSubmit = async (
     data: Record<string, string | boolean>
   ): Promise<boolean> => {
+    // OTP
+
+    if (isOtpLogin && mode === "signin") {
+      try {
+        startLoading();
+        // const res = await axios.post("/api/auth/send-otp", {
+        //   phone: data.phone,
+        // });
+        // toast.success(res.data.message || "Otp sent successfully");
+        openModal();
+        return true;
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Failed to send Otp");
+        return false;
+      } finally {
+        startLoading();
+      }
+    }
     const parsed = schema.safeParse(data);
 
     if (!parsed.success) {
@@ -52,10 +83,10 @@ export default function ClientFormWrapper({
 
     // Clear all errors if the whole payload is valid
     setError({});
-    setLoading(true);
+    startLoading();
 
     try {
-      setLoading(true);
+      startLoading();
       if (mode === "signup") {
         const res = await axios.post("/api/auth/signup", parsed.data);
         // 🔥 show toast
@@ -92,12 +123,18 @@ export default function ClientFormWrapper({
       }
       return false;
     } finally {
-      setLoading(false); // ✅ stop loading
+      stopLoading(); // ✅ stop loading
     }
   };
 
   // Validate a single field on change; only clear its error when valid
   const handleFieldChange = (fieldName: string, value: string | boolean) => {
+    setFormValues((prev) => ({ ...prev, [fieldName]: value }));
+
+    if (fieldName === "loginWithOtp") {
+      setIsOtpLogin(value as boolean);
+    }
+
     // Only bother if that field currently has an error (keeps UX calm)
     if (!error?.[fieldName]) return;
 
@@ -124,13 +161,37 @@ export default function ClientFormWrapper({
         <p className="text-red-500 text-sm mb-2">{error.general}</p>
       )}
       <DynamicForm
-        fields={fields}
+        fields={
+          isOtpLogin
+            ? fields.filter((f) => f.name !== "password" && f.name !== "email")
+            : fields.filter((f) => f.name !== "phone")
+        }
         onSubmit={handleSubmit}
-        submitText={submitText}
+        submitText={isOtpLogin ? "Send OTP" : submitText}
         buttonVariant="primary"
         fieldErrors={error}
         onFieldChange={handleFieldChange}
         isLoading={loading}
+      />
+
+      <OtpModal
+        otpValue={otpValue}
+        setOtpValue={setOtpValue}
+        onVerify={async () => {
+          try {
+            startLoading();
+            const res = await axios.post("/api/auth/verify-otp", {
+              phone: formValues.phone, // ✅ use formValues instead of fields
+              otp: otpValue,
+            });
+            toast.success(res.data.message || "OTP verified!");
+            router.push("/dashboard");
+          } catch (err: any) {
+            toast.error(err.response?.data?.message || "Invalid OTP");
+          } finally {
+            stopLoading();
+          }
+        }}
       />
     </div>
   );

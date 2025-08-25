@@ -17,6 +17,13 @@ export default function SignInPage() {
       required: true,
       placeholder: "vik6025@gmail.com",
     },
+    {
+      name: "phone",
+      type: "tel",
+      label: "Phone Number",
+      required: true,
+      placeholder: "Enter your phone number",
+    },
 
     {
       name: "password",
@@ -25,10 +32,16 @@ export default function SignInPage() {
       required: true,
       placeholder: "*******",
     },
+    {
+      name: "loginWithOtp",
+      type: "checkbox",
+      label: "Login with Otp",
+      required: true,
+    },
   ];
 
   return (
-    <Card className="w-auto p-10">
+    <Card className="w-auto p-[2rem]">
       <div className="flex flex-col justify-center items-center ">
         <div className="flex flex-col justify-center items-center w-[30rem] text-center gap-2 mb-3">
           <h1 className="text-xl font-bold">Welcome Back.</h1>
