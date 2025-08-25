@@ -1,4 +1,4 @@
-# 🏦 Wallet System (User & Merchant)
+# 🏦 Wallet System (User & Merchant) [MVP Articture click to see](https://ambiguous-modem-7dd.notion.site/IPAY-Paytm-Like-Wallet-AWelcome-to-the-first-React-Native-Mastery-Project-158d7abb0e8181118729d8d8ac5dbf7f)
 
 Paytm-like wallet application built with **Next.js**, **Prisma**, **Turborepo**, and **Docker**.
 Supports both **User** and **Merchant** applications, along with a shared database and packages. where both **User** and **Merchant** have wallets to **send**, **receive**, **request**, and **refund** money. All transactions are **wallet-to-wallet**, with funds **loaded/unloaded** via a dummy bank integration.
@@ -40,8 +40,8 @@ npm run dev
 
 ---
 
-
 # 🚀 Features Overview
+
 - ###### 👤 User
 
   - Can register and complete KYC (Know Your Customer).
@@ -54,10 +54,10 @@ npm run dev
 
   - Can add money to their wallet via dummy bank.
   - **Can** **send** **money**:
+
     - To merchants (for purchases).
 
-    -  To other users (via username, wallet ID, or public link).
-
+    - To other users (via username, wallet ID, or public link).
 
   - Can request payments from other users via a public payment link.
 
@@ -134,19 +134,24 @@ npm run dev
   - Merchants can initiate refunds for users.
 
   - Users can raise disputes if a transaction is incorrect.
+
 ```
 Refunds and disputes are tracked under the WalletTransaction model.
 ```
 
+---
 
 # 📡 REST API Endpoints
+
 #### 🔑 Auth
+
 ```
 POST /auth/register      → Register new user/merchant
 POST /auth/login         → Login
 ```
 
 #### 👤 User / Merchant
+
 ```
 GET  /users/:id          → Get user details
 POST /users/:id/kyc      → Submit KYC + 4-digit PIN
@@ -154,31 +159,68 @@ GET  /merchants/:id      → Get merchant details
 ```
 
 #### 💳 Wallet
+
 ```
 GET  /wallet/:id         → Get wallet balance
 POST /wallet/add-money   → Add funds (via dummy bank)
 POST /wallet/withdraw    → Withdraw funds (to dummy bank)
 ```
+
 #### 🔄 Transactions
- ```
+
+```
 POST /transactions/send   → Send money (user→user or user→merchant)
 GET  /transactions/:id    → Get transaction details
 POST /transactions/refund → Refund a transaction (merchant→user)
 ```
 
 #### 🔗 Payment Links
+
 ```
 POST /payment-links       → Create a payment link
 GET  /payment-links/:id   → Get link details
 POST /payment-links/pay   → Pay using a payment link
 ```
 
-####    🚨 Disputes
+#### 🚨 Disputes
+
 ```
 POST /disputes            → Raise a dispute
 GET  /disputes/:id        → Check dispute status
 PUT  /disputes/:id/resolve → Resolve or reject dispute
 ```
 
+---
+
 # ER Diagram
+
 ![ER Diagram](./assets/wallet-erd.png)
+
+---
+
+## 🎥 Project Demo
+
+![Quick Preview](assets/demo.gif)
+
+🎥 **Full Demo Video:** [Watch on YouTube](https://youtu.be/your_video_id)
+
+---
+
+## 🛠 Tech Stack
+
+**Frontend:**  
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38B2AC?logo=tailwindcss&logoColor=white)
+
+**Backend:**  
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)  
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white)
+
+**DevOps & Tools:**  
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)  
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)
+
+---
+
+**Repo setup:** [Paytm 1](https://projects.100xdevs.com/tracks/Paytm/paytm17-1)
+
+**Adding WebHooks:** [Paytm 2](https://projects.100xdevs.com/tracks/PayTM2/paytm2-1)
