@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../lib/authOption";
 import db from "@repo/db/client";
-import SessionGuard from "../../components/auth/SessionGuard";
-import { SignOutButton } from "../../components/auth/SignOutButton";
+import { authOptions } from "../../lib/authOption";
+import { SignOutButton } from "../../../components/auth/SignOutButton";
+import SessionGuard from "../../../components/auth/SessionGuard";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   let user = null;
   if (session?.user?.id) {
     user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: Number(session.user.id) }, // ✅ convert to Int
       include: {
         OnRampTransaction: true,
         Balance: true,
@@ -21,14 +21,7 @@ export default async function DashboardPage() {
   return (
     <SessionGuard>
       <div className="p-6">
-        <h1 className="text-3xl font-bold">
-          Welcome {user?.name ?? "User"} 🚀
-        </h1>
-
-        <p>Email: {user?.email}</p>
-        <p>Username: {user?.username}</p>
-        <p>ID: {user?.id}</p>
-        <p>Username: {user?.username}</p>
+        <h1>Home page</h1>
 
         <h2 className="mt-6 text-xl font-semibold">Balance</h2>
         {user?.Balance.map((b) => (
@@ -43,8 +36,6 @@ export default async function DashboardPage() {
             {txn.status} | {txn.amount} | {txn.provider}
           </p>
         ))}
-
-        <SignOutButton />
       </div>
     </SessionGuard>
   );

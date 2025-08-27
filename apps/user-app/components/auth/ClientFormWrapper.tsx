@@ -105,7 +105,7 @@ export default function ClientFormWrapper({
           return false;
         }
         toast.success(res?.error || "signin successful");
-        router.push("/dashboard");
+        router.push("/home");
       }
       return true;
     } catch (err: any) {
@@ -162,9 +162,13 @@ export default function ClientFormWrapper({
       )}
       <DynamicForm
         fields={
-          isOtpLogin
-            ? fields.filter((f) => f.name !== "password" && f.name !== "email")
-            : fields.filter((f) => f.name !== "phone")
+          mode === "signin"
+            ? isOtpLogin
+              ? fields.filter(
+                  (f) => f.name !== "password" && f.name !== "email"
+                )
+              : fields.filter((f) => f.name !== "phone")
+            : fields
         }
         onSubmit={handleSubmit}
         submitText={isOtpLogin ? "Send OTP" : submitText}

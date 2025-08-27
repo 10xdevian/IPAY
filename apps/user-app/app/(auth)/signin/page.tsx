@@ -36,7 +36,7 @@ export default function SignInPage() {
       name: "loginWithOtp",
       type: "checkbox",
       label: "Login with Otp",
-      required: true,
+      required: false,
     },
   ];
 

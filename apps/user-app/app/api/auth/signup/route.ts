@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       );
     }
 
-    let { email, password, username, name, number } = parsed.data;
+    let { email, password, username,  phone } = parsed.data;
 
     email = email.toLowerCase().trim();
     username = username.toLowerCase().trim();
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ Check phone number
-    const numberExists = await prisma.user.findUnique({ where: { number } });
+    const numberExists = await prisma.user.findUnique({ where: { phone } });
     if (numberExists) {
       return new Response(
         JSON.stringify({
@@ -63,14 +63,12 @@ export async function POST(req: Request) {
       );
     }
 
-   
-
     // Hash password
     const hashedPassword = await hash(password, 10);
 
     // Create user
     await prisma.user.create({
-      data: { email, name, username, password: hashedPassword, number },
+      data: { email, username, password: hashedPassword, phone },
     });
 
     return new Response(

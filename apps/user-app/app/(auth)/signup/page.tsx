@@ -11,7 +11,7 @@ export default function SignUpPage() {
   const fields = [
     { name: "username", type: "text", label: "Username", required: true },
     { name: "email", type: "email", label: "Email", required: true },
-    { name: "number", type: "tel", label: "Phone Number", required: true },
+    { name: "phone", type: "tel", label: "Phone Number", required: true },
     { name: "password", type: "password", label: "Password", required: true },
 
     

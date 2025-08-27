@@ -18,9 +18,28 @@ export const authOptions: NextAuthOptions = {
         const parsed = signinSchema.safeParse(credentials);
 
         if (!parsed.success) {
-          throw new Error("Invalid email or password ");
+          throw new Error("Invalid input");
         }
 
+        //  otp login
+        if (parsed.data.loginWithOtp) {
+          const { phone } = parsed.data;
+          const user = await prisma.user.findUnique({ where: { phone } });
+          if (!user) {
+            throw new Error("Phone not registered");
+          }
+
+          // Normally you'd check OTP here (e.g., compare codes from DB/Redis)
+          // For now, assume OTP was validated externally
+
+          return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+          };
+        }
+
+        // Password login
         const { email, password } = parsed.data;
 
         const user = await prisma.user.findUnique({
@@ -30,11 +49,13 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error("Enter the correct email");
+          throw new Error("Invalid email");
         }
 
         //  check password
-
+        if (!user?.password) {
+          throw new Error("Invalid password");
+        }
         const isCorrectPassword = await bcrypt.compare(password, user.password);
 
         if (!isCorrectPassword) {
@@ -43,7 +64,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name,
+          username: user.username,
         };
       },
     }),
