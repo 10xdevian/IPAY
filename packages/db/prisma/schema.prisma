@@ -1,124 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  username  String   @unique
-  password  String
-  kyc       Kyc?
-  wallet    Wallet?  @relation("UserWallet")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                Int                 @id @default(autoincrement())
+  username          String              @unique
+  email             String?             @unique
+  phone             String              @unique
+  password          String
+  OnRampTransaction OnRampTransaction[]
+  Balance           Balance[]
+  kyc               Kyc?
 }
 
 model Merchant {
-  id        String   @id @default(uuid())
-  name      String
+  id        Int      @id @default(autoincrement())
   email     String   @unique
-  business  String?
-  wallet    Wallet?  @relation("MerchantWallet")
+  name      String?
+  auth_type AuthType
+}
+
+model OnRampTransaction {
+  id        Int          @id @default(autoincrement())
+  status    OnRampStatus
+  token     String       @unique
+  provider  String
+  amount    Int
+  startTime DateTime
+  userId    Int
+  user      User         @relation(fields: [userId], references: [id])
+}
+
+model Balance {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  amount Int
+  locked Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Kyc {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  fullName   String
+  fatherName String
+  city       String
+  pincode    String
+
+  documentType   DocumentType
+  documentNumber String       @unique
+
+  paymentPin String // hashed, set during KYC
+  status     KycStatus @default(Pending)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Kyc {
-  id         String   @id @default(uuid())
-  userId     String   @unique
-  user       User     @relation(fields: [userId], references: [id])
-  documentId String
-  status     String   @default("PENDING") // APPROVED / REJECTED / PENDING
-  pinCode    String // 4 digit PIN for secure payments
-  createdAt  DateTime @default(now())
+enum AuthType {
+  Google
+  Github
 }
 
-model Wallet {
-  id                   String              @id @default(uuid())
-  balance              Float               @default(0)
-  userId               String?             @unique
-  merchantId           String?             @unique
-  user                 User?               @relation("UserWallet", fields: [userId], references: [id])
-  merchant             Merchant?           @relation("MerchantWallet", fields: [merchantId], references: [id])
-  transactionsSent     WalletTransaction[] @relation("SenderTransactions")
-  transactionsReceived WalletTransaction[] @relation("ReceiverTransactions")
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  PaymentRequest       PaymentRequest[]
-  PublicPaymentLink    PublicPaymentLink[]
-  RefundRequest        RefundRequest[]
+enum OnRampStatus {
+  Success
+  Failure
+  Processing
 }
 
-model WalletTransaction {
-  id               String          @id @default(uuid())
-  senderId         String
-  receiverId       String
-  sender           Wallet          @relation("SenderTransactions", fields: [senderId], references: [id])
-  receiver         Wallet          @relation("ReceiverTransactions", fields: [receiverId], references: [id])
-  amount           Float
-  status           String          @default("PENDING") // SUCCESS / FAILED / REFUNDED / DISPUTED
-  transactionType  String // CREDIT / DEBIT / REFUND / DISPUTE
-  referenceId      String? // can link to PaymentRequest / RefundRequest
-  createdAt        DateTime        @default(now())
-  PaymentRequest   PaymentRequest? @relation(fields: [paymentRequestId], references: [id])
-  paymentRequestId String?
-  RefundRequest    RefundRequest[]
-  Dispute          Dispute[]
+enum DocumentType {
+  Aadhaar
+  Passport
+  PAN
 }
 
-model PaymentRequest {
-  id          String              @id @default(uuid())
-  requesterId String
-  requester   Wallet              @relation(fields: [requesterId], references: [id])
-  amount      Float
-  reason      String?
-  status      String              @default("PENDING") // PENDING / PAID / CANCELLED
-  payments    WalletTransaction[]
-  createdAt   DateTime            @default(now())
-}
-
-model PublicPaymentLink {
-  id        String   @id @default(uuid())
-  creatorId String
-  creator   Wallet   @relation(fields: [creatorId], references: [id])
-  amount    Float
-  reason    String?
-  urlSlug   String   @unique
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-}
-
-model RefundRequest {
-  id           String            @id @default(uuid())
-  originalTxId String
-  originalTx   WalletTransaction @relation(fields: [originalTxId], references: [id])
-  requesterId  String
-  requester    Wallet            @relation(fields: [requesterId], references: [id])
-  status       String            @default("PENDING") // APPROVED / REJECTED / PENDING
-  createdAt    DateTime          @default(now())
-}
-
-model Dispute {
-  id            String            @id @default(uuid())
-  transactionId String
-  transaction   WalletTransaction @relation(fields: [transactionId], references: [id])
-  reason        String
-  status        String            @default("OPEN") // OPEN / RESOLVED / REJECTED
-  createdAt     DateTime          @default(now())
-}
-
-model DummyBank {
-  id         String   @id @default(uuid())
-  userId     String?
-  merchantId String?
-  amount     Float
-  type       String // DEPOSIT / WITHDRAWAL
-  status     String   @default("PENDING") // SUCCESS / FAILED
-  createdAt  DateTime @default(now())
+enum KycStatus {
+  Pending
+  Approved
+  Rejected
 }
