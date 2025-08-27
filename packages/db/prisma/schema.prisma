@@ -49,13 +49,13 @@ model Kyc {
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
-  fullName   String
-  fatherName String
-  city       String
-  pincode    String
-
-  documentType   DocumentType
-  documentNumber String       @unique
+  fullName        String
+  fatherName      String
+  city            String
+  pincode         String
+  profileImageUrl String?
+  documentType    DocumentType
+  documentNumber  String       @unique
 
   paymentPin String // hashed, set during KYC
   status     KycStatus @default(Pending)
