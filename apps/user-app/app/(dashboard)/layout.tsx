@@ -3,7 +3,6 @@ import SessionGuard from "../../components/auth/SessionGuard";
 import Sidebar from "../../components/dashboard/Sidebar";
 import { authOptions } from "../lib/authOption";
 import db from "@repo/db/client";
-import { Button } from "@repo/ui";
 import InteractiveButton from "../../components/ui/InteractiveButton";
 
 export default async function DashboardLayout({

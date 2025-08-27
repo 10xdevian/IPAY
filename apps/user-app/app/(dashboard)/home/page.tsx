@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import db from "@repo/db/client";
 import { authOptions } from "../../lib/authOption";
-import { SignOutButton } from "../../../components/auth/SignOutButton";
 import SessionGuard from "../../../components/auth/SessionGuard";
 
 export default async function DashboardPage() {
