@@ -16,22 +16,29 @@ export const signupSchema = z.object({
     .refine((val) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
       message: "Username cannot be an email",
     }),
-  name: z.string().min(3, "Name must be at least 3 characters"),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  number: z
+  phone: z
     .string()
     .min(10, "Phone Number must be at least 10 Digits")
     .max(14, "Must be a valid mobile number")
     .regex(phoneRegex, "Must be a valid phone number with 10 digits"),
-  acceptTerms: z
-    .boolean()
-    .refine((val) => val === true, "You must accept terms"),
 });
-export const signinSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
+
+export const signinSchema = z.discriminatedUnion("loginWithOtp", [
+  z.object({
+    loginWithOtp: z.literal(true),
+    phone: z.string().regex(/^[0-9]{10}$/, "Phone must be 10 digits"),
+    email: z.string().optional(),
+    password: z.string().optional(),
+  }),
+  z.object({
+    loginWithOtp: z.literal(false).optional(), // default to false
+    email: z.string().email("Enter a valid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    phone: z.string().optional(),
+  }),
+]);
 
 export type SignupInput = z.infer<typeof signupSchema>;
 export type SigninInput = z.infer<typeof signinSchema>;
