@@ -6,6 +6,7 @@ import db from "@repo/db/client";
 import InteractiveButton from "../../components/ui/InteractiveButton";
 import Image from "next/image";
 import profileImage from "../../../../assets/profile.png";
+
 export default async function DashboardLayout({
   children,
 }: {

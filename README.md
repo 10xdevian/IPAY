@@ -29,9 +29,10 @@ cp .env.example.txt .env
 
 # 6️⃣ (from the root) Run database migrations & generate Prisma Client
 
-npx prisma migrate dev --schema=packages/db/prisma/schema.prisma
-npx prisma generate --schema=packages/db/prisma/schema.prisma
-npx prisma studio --schema=packages/db/prisma/schema.prisma
+npx prisma migrate dev
+npx prisma db seed
+npx prisma generate
+npx prisma studio
 
 # 7️⃣ Start the development server
 npm run dev
