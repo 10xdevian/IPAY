@@ -6,6 +6,8 @@ import db from "@repo/db/client";
 import InteractiveButton from "../../components/ui/InteractiveButton";
 import Image from "next/image";
 import profileImage from "../../../../assets/profile.png";
+import { headers } from "next/headers";
+import DashboardHeader from "../../components/dashboard/DashboardHeader";
 
 export default async function DashboardLayout({
   children,
@@ -17,7 +19,7 @@ export default async function DashboardLayout({
   let user = null;
   if (session?.user?.id) {
     user = await db.user.findUnique({
-      where: { id: Number(session.user.id) }, // ✅ convert to Int
+      where: { id: Number(session.user.id) },
       include: {
         OnRampTransaction: true,
         Balance: true,
@@ -26,39 +28,22 @@ export default async function DashboardLayout({
     });
   }
 
+  // Get the current path
+  const pathname = headers().get("next-url") ?? ""; // fallback just in case
+
+  const isHomePage = pathname === "/home"; // or use startsWith("/home") if needed
+
   return (
     <SessionGuard>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen p-10">
         {/* Left Sidebar */}
-        <aside className="w-64 bg-gray-900 text-white p-4">
+        <aside className="w-[20rem]  p-4">
           <Sidebar />
         </aside>
 
         {/* Right Content Area */}
-        <main className="flex-1 bg-gray-50 p-6">
-          <div className="flex justify-between ">
-            <InteractiveButton variant="secondary" href="/home">
-              <h1 className="text-xl p-2"> Back</h1>
-            </InteractiveButton>
-
-            <InteractiveButton variant="secondary" href="/your-account">
-              <div className="flex gap-1.5 items-center">
-                <div className="border border-red-400 rounded-full">
-                  <Image
-                    src={
-                      user?.kyc?.profileImageUrl
-                        ? user.kyc.profileImageUrl
-                        : profileImage
-                    }
-                    height={40}
-                    width={40}
-                    alt="profile"
-                  />
-                </div>
-                <h1 className="text-2xl ">{user?.username ?? "User"}</h1>
-              </div>
-            </InteractiveButton>
-          </div>
+        <main className="flex-1  p-6">
+          <DashboardHeader user={user} />
           {children}
         </main>
       </div>

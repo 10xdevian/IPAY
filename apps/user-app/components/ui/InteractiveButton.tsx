@@ -12,6 +12,7 @@ interface InteractiveButtonProps {
   className?: string;
   onClick?: () => void;
   asButton?: boolean;
+  
 }
 
 function InteractiveButton({
