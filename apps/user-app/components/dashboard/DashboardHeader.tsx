@@ -14,7 +14,7 @@ function DashboardHeader({ user }: { user: any }) {
       {/* LEFT SIDE */}
       {isHomePage ? (
         <div className="">
-          <h1 className="text-xl font-bold">
+          <h1 className="text-3xl font-bold">
             Hy
             <span className="text-gray-500 p-1">{user?.kyc?.fullName}</span>
             👋🏻
@@ -25,13 +25,13 @@ function DashboardHeader({ user }: { user: any }) {
         </div>
       ) : (
         <InteractiveButton variant="secondary" href="/home">
-          <h1 className="text-xl p-2">Back</h1>
+          <h1 className="text-xl p-2 px-9">Back</h1>
         </InteractiveButton>
       )}
 
       {/* RIGHT SIDE (Profile button always) */}
       <InteractiveButton variant="secondary" href="/your-account">
-        <div className="flex gap-1.5 items-center">
+        <div className="flex gap-1.5 items-center px-3">
           <div className="w-[3rem] h-[3rem] rounded-full overflow-hidden border border-gray-200 flex items-center justify-center">
             <Image
               src={user?.kyc?.profileImageUrl ?? profileImage}

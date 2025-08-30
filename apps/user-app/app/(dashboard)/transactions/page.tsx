@@ -1,27 +1,20 @@
-import { getServerSession } from "next-auth";
 import React from "react";
-import db from "@repo/db/client";
-import { authOptions } from "../../lib/authOption";
+import { getUserWithDetails } from "../../lib/userService";
 import TransactionsList from "../../../components/dashboard/TransactionList";
 
 async function page() {
-  const session = await getServerSession(authOptions);
+  const user = await getUserWithDetails();
 
-  let user = null;
-  if (session?.user?.id) {
-    user = await db.user.findUnique({
-      where: { id: Number(session.user.id) }, // ✅ convert to Int
-      include: {
-        OnRampTransaction: true,
-        Balance: true,
-        kyc: true,
-      },
-    });
+  if (!user) {
+    return <div>Loading....</div>;
   }
+
   return (
-    <div>
-      <h1>Transaction</h1>
-      <TransactionsList transaction={user?.OnRampTransaction || []} />
+    <div className="p-6">
+      <h1 className="text-black font-extrabold text-3xl">Transaction</h1>
+      <div className="px-30 mt-3">
+        <TransactionsList transaction={user?.OnRampTransaction || []} />
+      </div>
     </div>
   );
 }

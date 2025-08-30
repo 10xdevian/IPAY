@@ -6,6 +6,7 @@ import { ArrowLeftRight, House, Send } from "lucide-react";
 
 const navItems = [
   { name: "Home", href: "/home", icon: House },
+   { name: "Add Money", href: "/add-money", icon: Send },
   { name: "Send", href: "/send", icon: Send },
   { name: "Transactions", href: "/transactions", icon: ArrowLeftRight },
 ];

@@ -226,5 +226,4 @@ PUT  /disputes/:id/resolve → Resolve or reject dispute
 
 **Adding WebHooks:** [Paytm 2](https://projects.100xdevs.com/tracks/PayTM2/paytm2-1)
 
-
 https://dashboard-template-1-ivory.vercel.app/en/dashboard

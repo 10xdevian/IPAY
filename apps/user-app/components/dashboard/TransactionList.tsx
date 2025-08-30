@@ -24,6 +24,8 @@ function TransactionsList({
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
+
+           
           </div>
         </div>
       ))}
