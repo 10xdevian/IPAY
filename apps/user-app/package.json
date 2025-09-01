@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@repo/types": "*",
     "@repo/store": "*",
     "@repo/ui": "*",
     "@repo/zod-schema": "*",

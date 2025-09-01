@@ -2,7 +2,12 @@
   "name": "webhooks",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "lint": "tsc",
+    "build": "tsc -p .",
+    "start": "node dist/index",
+    "dev": "tsc-watch --onSuccess \"npm start\""
+  },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "typescript": "^5.9.2"
@@ -10,6 +15,7 @@
   "dependencies": {
     "@repo/db": "*",
     "esbuild": "^0.25.9",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "tsc-watch": "^7.1.1"
   }
 }

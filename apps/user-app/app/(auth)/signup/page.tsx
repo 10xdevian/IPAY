@@ -1,20 +1,31 @@
 import { Metadata } from "next";
 import InteractiveButton from "../../../components/ui/InteractiveButton";
 import ClientFormWrapper from "../../../components/auth/ClientFormWrapper";
-import { Button, Card } from "@repo/ui";
+import { Card } from "@repo/ui";
+import { Field } from "@repo/types";
 export const metadata: Metadata = {
   title: "Sign Up - MyApp",
   description: "Login to access your account",
 };
 
 export default function SignUpPage() {
-  const fields = [
+  const fields: Field[] = [
     { name: "username", type: "text", label: "Username", required: true },
     { name: "email", type: "email", label: "Email", required: true },
     { name: "phone", type: "tel", label: "Phone Number", required: true },
     { name: "password", type: "password", label: "Password", required: true },
-
-    
+    {
+      name: "Banks",
+      type: "select",
+      label: "Bank name",
+      required: true,
+      options: [
+        { label: "HDFC Bank", value: "hdfc" },
+        { label: "ICICI Bank", value: "icici" },
+        { label: "Axis Bank", value: "axis" },
+        { label: "XYZ Bank", value: "axis" },
+      ],
+    },
   ];
 
   return (

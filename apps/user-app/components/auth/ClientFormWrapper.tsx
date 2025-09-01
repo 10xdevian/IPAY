@@ -14,13 +14,7 @@ import type { ZodObject, ZodTypeAny } from "zod";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import OtpModal from "./OtpModal";
-interface Field {
-  name: string;
-  type: string;
-  label?: string;
-  required?: boolean;
-  placeholder?: string;
-}
+import { Field } from "@repo/types";
 
 interface ClientFormWrapperProps {
   fields: Field[];

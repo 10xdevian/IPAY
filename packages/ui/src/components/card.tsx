@@ -23,7 +23,7 @@ export function Card({
   const variantClass = variantBg[variant] || variantBg["secondary"];
   return (
     <div
-      className={`${variantClass} p-2 border border-gray-300 rounded-md ${className}`}
+      className={`${variantClass} p-2  rounded-md ${className}`}
       onClick={onClick}
     >
       <h1 className="font-bold">{title}</h1>

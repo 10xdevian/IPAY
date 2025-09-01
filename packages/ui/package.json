@@ -10,6 +10,7 @@
     "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
+    "@repo/types":"*",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@turbo/gen": "^1.12.4",

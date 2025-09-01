@@ -1,14 +1,7 @@
 "use client";
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Button } from "./button";
-
-interface Field {
-  name: string;
-  type: string;
-  placeholder?: string;
-  label?: string;
-  required?: boolean;
-}
+import { Field } from "@repo/types";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "link" | "logo";
 
@@ -44,9 +37,20 @@ export const DynamicForm: FC<DynamicFormProps> = ({
       )
   );
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, type, value, checked } = e.target;
-    const next = type === "checkbox" ? checked : value;
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const target = e.target;
+
+    const { name, type, value } = target;
+
+    let next: string | boolean;
+
+    if (target instanceof HTMLInputElement && type === "checkbox") {
+      next = target.checked;
+    } else {
+      next = value;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -91,6 +95,35 @@ export const DynamicForm: FC<DynamicFormProps> = ({
                 <span className="text-gray-900 text-sm">{field.label}</span>
               )}
             </label>
+          ) : field.type === "select" ? (
+            <>
+              {field.label && (
+                <label
+                  htmlFor={field.name}
+                  className="block mb-0.5 text-sm font-medium text-gray-900"
+                >
+                  {field.label}
+                </label>
+              )}
+
+              <select
+                id={field.name}
+                name={field.name}
+                value={formData[field.name] as string}
+                onChange={handleChange}
+                className="border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                required={field.required}
+              >
+                <option value="" disabled>
+                  Select your bank
+                </option>
+                {field.options?.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </>
           ) : (
             <>
               {field.label && (

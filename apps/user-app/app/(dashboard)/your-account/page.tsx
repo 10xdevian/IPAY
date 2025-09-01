@@ -1,6 +1,3 @@
-import { getServerSession } from "next-auth";
-import db from "@repo/db/client";
-import { authOptions } from "../../lib/authOption";
 import { SignOutButton } from "../../../components/auth/SignOutButton";
 import SessionGuard from "../../../components/auth/SessionGuard";
 import { getUserWithDetails } from "../../lib/userService";
@@ -20,9 +17,7 @@ export default async function YourAccount() {
         </h1>
 
         <h1 className="text-3xl font-bold">username: {user?.username}</h1>
-        <h1 className="text-3xl font-bold">
-          Father Name: {kyc?.fatherName}
-        </h1>
+        <h1 className="text-3xl font-bold">Father Name: {kyc?.fatherName}</h1>
 
         <h1 className="text-3xl font-bold">City: {kyc?.city}</h1>
 

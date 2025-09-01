@@ -1,8 +1,13 @@
 import { Navbar } from "@repo/ui";
 import React from "react";
 import InteractiveButton from "./InteractiveButton";
+import { SignOutButton } from "../auth/SignOutButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../app/lib/authOption";
 
-function NavbarWrapper() {
+async function NavbarWrapper() {
+  const session = await getServerSession(authOptions);
+
   return (
     <div>
       <Navbar
@@ -35,12 +40,19 @@ function NavbarWrapper() {
             <InteractiveButton variant="secondary" href="/help">
               Help
             </InteractiveButton>
-            <InteractiveButton variant="secondary" href="/signin">
-              Login
-            </InteractiveButton>
-            <InteractiveButton href="/signup" variant="primary">
-              Register
-            </InteractiveButton>
+
+            {session ? (
+              <SignOutButton />
+            ) : (
+              <>
+                <InteractiveButton variant="secondary" href="/signin">
+                  Login
+                </InteractiveButton>
+                <InteractiveButton href="/signup" variant="primary">
+                  Register
+                </InteractiveButton>
+              </>
+            )}
           </>
         }
       />

@@ -10,10 +10,6 @@ export default async function DashboardLayout({
 }) {
   const user = await getUserWithDetails();
 
-  if (!user) {
-    return <div>Loading....</div>;
-  }
-
   return (
     <SessionGuard>
       <div className="flex min-h-screen p-10">

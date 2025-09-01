@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@repo/ui";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import InteractiveButton from "../ui/InteractiveButton";
 
 export function SignOutButton() {
   const router = useRouter();
@@ -15,8 +15,8 @@ export function SignOutButton() {
   };
 
   return (
-    <Button variant="danger" onClick={handleSignOut}>
-      Sign Out
-    </Button>
+    <InteractiveButton className="px-6 py-3" onClick={handleSignOut} variant="primary">
+      Log Out
+    </InteractiveButton>
   );
 }
