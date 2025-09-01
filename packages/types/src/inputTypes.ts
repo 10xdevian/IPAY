@@ -16,6 +16,8 @@ export interface BaseField {
   label?: string;
   placeholder?: string;
   required?: boolean;
+  className?: string;
+  wrapperClassName?: string;
 }
 
 export interface TextField extends BaseField {

@@ -1,4 +1,6 @@
-# 🏦 Wallet System (User & Merchant) [MVP Articture click to see](https://ambiguous-modem-7dd.notion.site/IPAY-Paytm-Like-Wallet-AWelcome-to-the-first-React-Native-Mastery-Project-158d7abb0e8181118729d8d8ac5dbf7f)
+[MVP Articture click to see](https://ambiguous-modem-7dd.notion.site/IPAY-Paytm-Like-Wallet-AWelcome-to-the-first-React-Native-Mastery-Project-158d7abb0e8181118729d8d8ac5dbf7f)
+
+# 🏦 Wallet System (User & Merchant)
 
 Paytm-like wallet application built with **Next.js**, **Prisma**, **Turborepo**, and **Docker**.
 Supports both **User** and **Merchant** applications, along with a shared database and packages. where both **User** and **Merchant** have wallets to **send**, **receive**, **request**, and **refund** money. All transactions are **wallet-to-wallet**, with funds **loaded/unloaded** via a dummy bank integration.

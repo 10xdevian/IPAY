@@ -13,7 +13,6 @@ import axios from "axios";
 import type { ZodObject, ZodTypeAny } from "zod";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
-import OtpModal from "./OtpModal";
 import { Field } from "@repo/types";
 
 interface ClientFormWrapperProps {
@@ -180,26 +179,6 @@ export default function ClientFormWrapper({
         fieldErrors={error}
         onFieldChange={handleFieldChange}
         isLoading={loading}
-      />
-
-      <OtpModal
-        otpValue={otpValue}
-        setOtpValue={setOtpValue}
-        onVerify={async () => {
-          try {
-            startLoading();
-            const res = await axios.post("/api/auth/verify-otp", {
-              phone: formValues.phone, // ✅ use formValues instead of fields
-              otp: otpValue,
-            });
-            toast.success(res.data.message || "OTP verified!");
-            router.push("/dashboard");
-          } catch (err: any) {
-            toast.error(err.response?.data?.message || "Invalid OTP");
-          } finally {
-            stopLoading();
-          }
-        }}
       />
     </div>
   );

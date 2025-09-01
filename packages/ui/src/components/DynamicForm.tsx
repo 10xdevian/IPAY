@@ -80,7 +80,10 @@ export const DynamicForm: FC<DynamicFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className={`w-full ${className ?? ""}`}>
       {fields.map((field) => (
-        <div key={field.name} className="mb-2">
+        <div
+          key={field.name}
+          className={`mb-2 ${field.wrapperClassName ?? ""}`}
+        >
           {field.type === "checkbox" ? (
             <label className="flex items-center gap-1">
               <input
@@ -89,7 +92,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
                 type="checkbox"
                 checked={formData[field.name] as boolean}
                 onChange={handleChange}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500   "
+                className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ${field.className ?? ""}`}
               />
               {field.label && (
                 <span className="text-gray-900 text-sm">{field.label}</span>
@@ -111,7 +114,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
                 name={field.name}
                 value={formData[field.name] as string}
                 onChange={handleChange}
-                className="border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                className={`border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 ${field.className ?? ""}`}
                 required={field.required}
               >
                 <option value="" disabled>
@@ -142,7 +145,7 @@ export const DynamicForm: FC<DynamicFormProps> = ({
                 required={field.required}
                 value={formData[field.name] as string}
                 onChange={handleChange}
-                className="border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 placeholder-gray-400"
+                className={`border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 placeholder-gray-400 ${field.className}`}
               />
             </>
           )}
