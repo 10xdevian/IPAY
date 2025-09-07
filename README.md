@@ -1,5 +1,7 @@
 [MVP Articture click to see](https://ambiguous-modem-7dd.notion.site/IPAY-Paytm-Like-Wallet-AWelcome-to-the-first-React-Native-Mastery-Project-158d7abb0e8181118729d8d8ac5dbf7f)
 
+- Agregation p2p and onramp and offramp transaction to check bugs not in my application
+
 # 🏦 Wallet System (User & Merchant)
 
 Paytm-like wallet application built with **Next.js**, **Prisma**, **Turborepo**, and **Docker**.

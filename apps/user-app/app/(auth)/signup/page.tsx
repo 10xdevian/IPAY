@@ -14,18 +14,6 @@ export default function SignUpPage() {
     { name: "email", type: "email", label: "Email", required: true },
     { name: "phone", type: "tel", label: "Phone Number", required: true },
     { name: "password", type: "password", label: "Password", required: true },
-    {
-      name: "Banks",
-      type: "select",
-      label: "Bank name",
-      required: true,
-      options: [
-        { label: "HDFC Bank", value: "hdfc" },
-        { label: "ICICI Bank", value: "icici" },
-        { label: "Axis Bank", value: "axis" },
-        { label: "XYZ Bank", value: "axis" },
-      ],
-    },
   ];
 
   return (

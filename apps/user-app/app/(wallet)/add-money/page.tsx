@@ -22,7 +22,13 @@ export default async function DashboardPage() {
       ],
       wrapperClassName: "mt-10 mb-10",
     },
-    { name: "amount", type: "text", label: "Amount", required: true , className:"p-4 border border-gray-300 mb-10" },
+    {
+      name: "amount",
+      type: "text",
+      label: "Amount",
+      required: true,
+      className: "p-4 border border-gray-300 mb-10",
+    },
   ];
 
   const user = await getUserWithDetails();
