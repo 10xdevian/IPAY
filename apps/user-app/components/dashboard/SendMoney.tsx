@@ -14,7 +14,7 @@ const supportedBank = [
   },
 ];
 
-export default function AddMoney() {
+export default function SendMoney() {
   const [redirect, setRedirect] = useState(supportedBank[0]?.redirectURL);
   const [amount, setAmount] = useState(0);
   const [provider, setProvider] = useState(supportedBank[0]?.name || "");
@@ -22,26 +22,21 @@ export default function AddMoney() {
   return (
     <div className="flex flex-col gap-10">
       <TextInput
-        label="Amount"
-        placeholder="Amount"
+        label="Phone number"
+        placeholder="Phone number"
         onChange={(e) => {
           //@ts-ignore
           setAmount(e);
         }}
       />
 
-      <h1>Banks</h1>
-      <Select
-        onSelect={(value) => {
-          setRedirect(
-            supportedBank.find((x) => x.name === value)?.redirectURL || "",
-          );
-          setProvider(supportedBank.find((x) => x.name === value)?.name || "");
+      <TextInput
+        label="Amount"
+        placeholder="Amount"
+        onChange={(e) => {
+          //@ts-ignore
+          setAmount(e);
         }}
-        options={supportedBank.map((x) => ({
-          key: x.name,
-          value: x.name,
-        }))}
       />
 
       <button
