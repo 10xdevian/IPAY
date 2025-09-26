@@ -3,33 +3,34 @@ import { Card } from "@repo/ui";
 import InteractiveButton from "../../../components/ui/InteractiveButton";
 import TransactionsList from "../../../components/dashboard/TransactionList";
 import { getUserWithDetails } from "../../lib/userService";
-import { Field } from "@repo/types";
-import AddMoneyFormWrapper from "../../../components/dashboard/AddMoneyFormWrapper";
+// import { Field } from "@repo/types";
+// import ClientFormWrapper from "../../../components/dashboard/ClientFormWrapper";
+import AddMoney from "../../../components/dashboard/AddMoney";
 export default async function DashboardPage() {
-  const fields: Field[] = [
-    {
-      name: "Banks",
-      type: "select",
-      label: "Bank name",
-      required: true,
-      className: "mb-10 p-4 border border-gray-300",
+  // const fields: Field[] = [
+  //   {
+  //     name: "Banks",
+  //     type: "select",
+  //     label: "Bank name",
+  //     required: true,
+  //     className: "mb-10 p-4 border border-gray-300",
 
-      options: [
-        { label: "HDFC Bank", value: "hdfc" },
-        { label: "ICICI Bank", value: "icici" },
-        { label: "Axis Bank", value: "axis" },
-        { label: "XYZ Bank", value: "axis" },
-      ],
-      wrapperClassName: "mt-10 mb-10",
-    },
-    {
-      name: "amount",
-      type: "text",
-      label: "Amount",
-      required: true,
-      className: "p-4 border border-gray-300 mb-10",
-    },
-  ];
+  //     options: [
+  //       { label: "HDFC Bank", value: "hdfc" },
+  //       { label: "ICICI Bank", value: "icici" },
+  //       { label: "Axis Bank", value: "axis" },
+  //       { label: "XYZ Bank", value: "axis" },
+  //     ],
+  //     wrapperClassName: "mt-10 mb-10",
+  //   },
+  //   {
+  //     name: "amount",
+  //     type: "text",
+  //     label: "Amount",
+  //     required: true,
+  //     className: "p-4 border border-gray-300 mb-10",
+  //   },
+  // ];
 
   const user = await getUserWithDetails();
 
@@ -47,7 +48,9 @@ export default async function DashboardPage() {
             <h1>Add money</h1>
 
             <div className="">
-              <AddMoneyFormWrapper submitText="Add money" fields={fields} />
+              {/*<ClientFormWrapper submitText="Add money" fields={fields} />*/}
+
+              <AddMoney />
             </div>
           </div>
         </div>

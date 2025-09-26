@@ -1,4 +1,0 @@
-DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/Paytm"
-
-REDIS_URL=""
-JWT_SECRET=supersecret

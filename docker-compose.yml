@@ -1,18 +1,18 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  db:
-    container_name: Paytm
+  postgres:
     image: postgres:16
+    container_name: my-postgres
     restart: always
-    ports:
-      - "5432:5432" # Standard PostgreSQL port
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: Paytm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: ipay 
+    ports:
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  pgdata:
