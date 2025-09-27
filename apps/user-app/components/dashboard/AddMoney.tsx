@@ -48,6 +48,7 @@ export default function AddMoney() {
         onClick={async () => {
           await createOnRampTransaction(amount * 100, provider);
           window.location.href = redirect || "";
+          setAmount(0);
         }}
       >
         Add money

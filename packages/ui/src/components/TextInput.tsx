@@ -1,10 +1,12 @@
 "use client";
 
 export const TextInput = ({
+  value,
   placeholder,
   onChange,
   label,
 }: {
+  value?: any;
   placeholder: string;
   onChange: (value: string) => void;
   label: string;
@@ -15,6 +17,7 @@ export const TextInput = ({
         {label}
       </label>
       <input
+        value={value}
         onChange={(e) => onChange(e.target.value)}
         type="text"
         id="first_name"

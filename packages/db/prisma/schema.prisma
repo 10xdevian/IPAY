@@ -16,6 +16,18 @@ model User {
   OnRampTransaction OnRampTransaction[]
   Balance           Balance[]
   kyc               Kyc?
+  sentTransfer      p2pTransfer[]       @relation(name: "FromSender")
+  receivedTransfer  p2pTransfer[]       @relation(name: "ToReceiver")
+}
+
+model p2pTransfer {
+  id         Int      @id @default(autoincrement())
+  sendrId    Int
+  receiverId Int
+  amount     Int
+  timestamp  DateTime
+  sender     User     @relation(name: "FromSender", fields: [sendrId], references: [id])
+  receiver   User     @relation(name: "ToReceiver", fields: [receiverId], references: [id])
 }
 
 model Merchant {
